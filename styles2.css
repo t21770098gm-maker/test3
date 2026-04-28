@@ -1,0 +1,239 @@
+/* =========================================
+   1. COLOR PALETTE & FONTS (Variables)
+   ========================================= */
+:root {
+    --bg-cream: #EAE0CC;
+    --accent-rose: #C9ADA1;
+    --accent-sage: #A0A083;
+    --text-olive: #798478;
+    --text-teal: #4D6A6D;
+}
+
+/* =========================================
+   2. BASE PAGE SETUP
+   ========================================= */
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    /* Applying your chosen font */
+    font-family: 'Garamond', serif; 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Applying your background color */
+    background-color: var(--bg-cream); 
+    color: var(--text-teal); /* Main text color */
+}
+
+/* =========================================
+   3. NAVIGATION (Header & Footer)
+   ========================================= */
+header, footer { 
+    padding: 30px 40px; 
+}
+
+header nav, footer nav { 
+    display: flex; 
+    gap: 25px; 
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-teal);
+    font-size: 1.3rem;
+    text-transform: lowercase;
+    transition: color 0.3s ease;
+}
+
+nav a:hover { 
+    color: var(--accent-rose); 
+}
+
+/* Replaced the harsh red underline with your dark teal/olive */
+nav a.active {
+    text-decoration: underline;
+    text-decoration-color: var(--text-olive);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+}
+
+/* =========================================
+   4. MAIN GALLERY (Home Page)
+   ========================================= */
+.home-main {
+    flex: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.gallery-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+}
+
+/* The Black Square behind the main photo */
+.photo-container {
+    width: 100%;
+    height: 550px;
+    background-color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.photo-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: opacity 0.2s;
+}
+
+.photo-container img:hover { 
+    opacity: 0.9; 
+}
+
+.caption {
+    margin-top: 15px;
+    font-size: 1.2rem;
+    color: var(--text-olive);
+    font-style: italic; /* Looks great with Garamond */
+}
+
+/* Navigation Arrows */
+button.nav-arrow {
+    background: none;
+    border: none;
+    font-size: 4rem;
+    color: var(--text-teal);
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    padding: 0 20px;
+}
+
+button.nav-arrow:hover { 
+    transform: scale(1.2); 
+    color: var(--accent-sage);
+}
+
+/* =========================================
+   5. ALBUMS PAGE (Grid & Sorting)
+   ========================================= */
+.albums-main {
+    flex: 1; 
+    padding: 20px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.controls-bar {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+}
+
+.controls-bar select {
+    padding: 8px 15px;
+    font-size: 1.1rem;
+    font-family: 'Garamond', serif; /* Match the dropdown to the site */
+    color: var(--text-teal);
+    background-color: var(--bg-cream);
+    border: 1px solid var(--text-teal);
+    cursor: pointer;
+    outline: none;
+}
+
+.albums-grid {
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+.album-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-teal);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.album-card:hover {
+    transform: scale(1.03);
+}
+
+.album-cover {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #000;
+    object-fit: cover;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.album-title {
+    font-size: 1.4rem;
+    color: var(--text-teal);
+}
+
+/* =========================================
+   6. LIGHTBOX (Pop-up Modal)
+   ========================================= */
+.lightbox {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 20, 20, 0.95); /* A slightly tinted dark background */
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: var(--bg-cream);
+    font-size: 3rem;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.close-btn:hover { 
+    color: var(--accent-rose); 
+}
+
+.lightbox .nav-arrow { position: absolute; color: var(--bg-cream); }
+.lightbox #modalPrev { left: 20px; }
+.lightbox #modalNext { right: 20px; }
