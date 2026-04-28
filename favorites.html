@@ -158,7 +158,7 @@
         const sortDropdown = document.getElementById("sortDropdown");
 
         // 2. Function to draw the albums on the screen
-        function renderAlbums(albumsToRender) {
+        function renderFavorites(albumsToRender) {
             gridElement.innerHTML = ""; // Clear the grid first
             
             albumsToRender.forEach(album => {
@@ -175,34 +175,34 @@
         }
 
         // 3. Function to handle sorting
-        function sortAlbums() {
+        function sortFavorites() {
             const sortMethod = sortDropdown.value;
-            let sortedAlbums = [...albums]; // Make a copy so we don't mess up the original list
+            let sortedFavorites = [...albums]; // Make a copy so we don't mess up the original list
 
             if (sortMethod === "name-asc") {
-                sortedAlbums.sort((a, b) => a.title.localeCompare(b.title));
+                sortedFavorites.sort((a, b) => a.title.localeCompare(b.title));
             } 
             else if (sortMethod === "name-desc") {
-                sortedAlbums.sort((a, b) => b.title.localeCompare(a.title));
+                sortedFavorites.sort((a, b) => b.title.localeCompare(a.title));
             } 
             else if (sortMethod === "date-new") {
                 // Newest first (highest date value to lowest)
-                sortedAlbums.sort((a, b) => new Date(b.date) - new Date(a.date));
+                sortedFavorites.sort((a, b) => new Date(b.date) - new Date(a.date));
             } 
             else if (sortMethod === "date-old") {
                 // Oldest first
-                sortedAlbums.sort((a, b) => new Date(a.date) - new Date(b.date));
+                sortedFavorites.sort((a, b) => new Date(a.date) - new Date(b.date));
             }
 
-            renderAlbums(sortedAlbums);
+            renderFavorites(sortedFavorites);
         }
 
         // 4. Set up the page when it loads
         // Listen for when the user changes the dropdown
-        sortDropdown.addEventListener("change", sortAlbums);
+        sortDropdown.addEventListener("change", sortFavorites);
         
         // Run the sort right away so they start in A-Z order (or whatever is first in the dropdown)
-        sortAlbums(); 
+        sortFavorites(); 
     </script>
 </body>
 </html>
