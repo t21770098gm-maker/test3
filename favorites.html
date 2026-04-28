@@ -4,107 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Favorites - My Photography</title>
-
     <style>
-        /* Base Page Setup */
+        /* Base Page Setup with your Colors and Fonts */
         body, html {
             margin: 0;
             padding: 0;
-            font-family: sans-serif;
+            font-family: 'Garamond', serif;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background-color: #ffffff;
+            background-color: #EAE0CC; /* Cream background */
+            color: #4D6A6D; /* Teal text */
         }
 
-        /* Navigation */
+        /* Top Navigation */
         header { padding: 20px 30px; }
         nav { display: flex; gap: 20px; }
         nav a {
             text-decoration: none;
-            color: #000;
-            font-size: 1.2rem;
-            text-transform: lowercase;
+            color: #4D6A6D;
+            font-size: 1.3rem;
+            /* Respects the exact capitalization you type in the HTML */
+            text-transform: none; 
+            transition: color 0.3s ease;
         }
-        nav a:hover { text-decoration: underline; }
-        
-        /* Active Page Styling (Red Underline) */
+        nav a:hover { color: #C9ADA1; } /* Rose hover */
+
+        /* Active Page Indicator */
         nav a.active {
             text-decoration: underline;
-            text-decoration-color: red;
-            text-decoration-thickness: 3px;
-            text-underline-offset: 4px;
+            text-decoration-color: #798478; /* Olive underline */
+            text-decoration-thickness: 2px;
+            text-underline-offset: 6px;
         }
 
-        /* Main Content area */
-        main {
+        /* Main Favorites Layout */
+        main.favorites-main {
             flex: 1; 
-            padding: 20px 50px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
         }
 
-        /* Top Bar with Sort */
-        .controls-bar {
-            width: 100%;
-            max-width: 1000px;
-            display: flex;
-            justify-content: flex-end; /* Pushes sort to the right */
-            margin-bottom: 30px;
-        }
-
-        .controls-bar select {
-            padding: 5px 10px;
-            font-size: 1rem;
-            border: 2px solid #000;
-            cursor: pointer;
-        }
-
-        /* The Infinite Grid */
+        /* 2-Column Grid matching your sketch */
         .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 60px; /* Lots of breathing room between stories */
             width: 100%;
             max-width: 1000px;
-            display: grid;
-            /* This is the magic line that makes it infinitely scrollable and responsive */
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 40px;
         }
 
-        /* Individual favorites Card */
-        .favorites-card {
+        /* Individual Card styling */
+        .story-card {
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-decoration: none; /* Removes link underline from the whole card */
-            color: #000;
+            text-decoration: none; /* Removes link styling from text */
+            color: inherit;
             cursor: pointer;
             transition: transform 0.2s ease;
         }
 
-        .favorites-card:hover {
-            transform: scale(1.03); /* Slight zoom when hovered */
+        .story-card:hover {
+            transform: translateY(-5px); /* Slight lift effect on hover */
         }
 
-        /* The Black Square Cover */
-        .favorites-cover {
+        /* The Black Square Photo Container */
+        .story-card img {
             width: 100%;
-            aspect-ratio: 1 / 1; /* Forces a perfect square */
-            background-color: #000;
+            aspect-ratio: 4 / 3; /* Slightly rectangular/square to match sketch */
+            background-color: #000000;
             object-fit: cover;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .favorites-title {
-            font-size: 1.2rem;
-            font-weight: normal;
+        /* Title and Date underneath */
+        .card-caption {
+            font-size: 1.4rem;
+            text-align: center;
         }
 
         /* Centered Footer Navigation */
         footer {
-            padding: 30px;
+            padding: 40px 30px;
             display: flex;
             justify-content: center;
+        }
+
+        /* Mobile Optimization: Stacks to 1 column on smaller screens */
+        @media (max-width: 768px) {
+            .favorites-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
         }
     </style>
 </head>
@@ -113,96 +107,46 @@
     <header>
         <nav>
             <a href="index.html">Home</a>
-            <a href="albums.html" class="active">Albums</a>
-            <a href="favorites.html">Favorites</a>
+            <a href="albums.html">Albums</a>
+            <a href="favorites.html" class="active">Favorites</a>
             <a href="about.html">About</a>
         </nav>
     </header>
 
-<main>
-    <div class="controls-bar">
-            <select id="sortDropdown">
-                <option value="name-asc">sort: name (a-z)</option>
-                <option value="name-desc">sort: name (z-a)</option>
-                <option value="date-new">sort: date (newest)</option>
-                <option value="date-old">sort: date (oldest)</option>
-            </select>
-        </div>
+    <main class="favorites-main">
+        <div class="favorites-grid">
+            
+            <a href="story-paris.html" class="story-card">
+                <img src="https://picsum.photos/id/1015/800/600" alt="River Valley">
+                <div class="card-caption">River Valley - Oct 2023</div>
+            </a>
 
-        <div class="albums-grid" id="albumsGrid">
-            </div>
+            <a href="story-mountains.html" class="story-card">
+                <img src="https://picsum.photos/id/1018/800/600" alt="Mountain Pass">
+                <div class="card-caption">Mountain Pass - Jan 2024</div>
+            </a>
+
+            <a href="story-ocean.html" class="story-card">
+                <img src="https://picsum.photos/id/1019/800/600" alt="Coastal Sunset">
+                <div class="card-caption">Coastal Sunset - May 2022</div>
+            </a>
+
+            <a href="story-city.html" class="story-card">
+                <img src="https://picsum.photos/id/1022/800/600" alt="Neon Streets">
+                <div class="card-caption">Neon Streets - Mar 2024</div>
+            </a>
+
+        </div>
     </main>
+
     <footer>
         <nav>
             <a href="index.html">Home</a>
-            <a href="albums.html" class="active">Albums</a>
-            <a href="favorites.html">Favorites</a>
+            <a href="albums.html">Albums</a>
+            <a href="favorites.html" class="active">Favorites</a>
             <a href="about.html">About</a>
         </nav>
     </footer>
 
-    <script>
-        // 1. Your Album Data
-        // Add a "date" so we can sort by time. YYYY-MM-DD works best for sorting.
-        // The "link" determines what happens when they click the album.
-        let albums = [
-            { title: "Nature Walks", date: "2023-10-15", coverImage: "https://picsum.photos/id/1015/400/400", link: "album-nature.html" },
-            { title: "Family Vacation", date: "2024-01-20", coverImage: "https://picsum.photos/id/1018/400/400", link: "album-vacation.html" },
-            { title: "Home Life", date: "2022-05-11", coverImage: "https://picsum.photos/id/1019/400/400", link: "album-home.html" },
-            { title: "The Stars", date: "2024-03-05", coverImage: "https://picsum.photos/id/1022/400/400", link: "album-stars.html" },
-            { title: "A Trip to the Zoo", date: "2021-08-14", coverImage: "https://picsum.photos/id/1020/400/400", link: "album-zoo.html" },
-            { title: "City Streets", date: "2023-12-01", coverImage: "https://picsum.photos/id/1021/400/400", link: "album-city.html" }
-        ];
-
-        const gridElement = document.getElementById("albumsGrid");
-        const sortDropdown = document.getElementById("sortDropdown");
-
-        // 2. Function to draw the albums on the screen
-        function renderFavorites(albumsToRender) {
-            gridElement.innerHTML = ""; // Clear the grid first
-            
-            albumsToRender.forEach(album => {
-                // Create the HTML for one album
-                const albumHTML = `
-                    <a href="${album.link}" class="album-card">
-                        <img src="${album.coverImage}" alt="${album.title}" class="album-cover">
-                        <div class="album-title">${album.title}</div>
-                    </a>
-                `;
-                // Add it to the grid
-                gridElement.innerHTML += albumHTML;
-            });
-        }
-
-        // 3. Function to handle sorting
-        function sortFavorites() {
-            const sortMethod = sortDropdown.value;
-            let sortedFavorites = [...albums]; // Make a copy so we don't mess up the original list
-
-            if (sortMethod === "name-asc") {
-                sortedFavorites.sort((a, b) => a.title.localeCompare(b.title));
-            } 
-            else if (sortMethod === "name-desc") {
-                sortedFavorites.sort((a, b) => b.title.localeCompare(a.title));
-            } 
-            else if (sortMethod === "date-new") {
-                // Newest first (highest date value to lowest)
-                sortedFavorites.sort((a, b) => new Date(b.date) - new Date(a.date));
-            } 
-            else if (sortMethod === "date-old") {
-                // Oldest first
-                sortedFavorites.sort((a, b) => new Date(a.date) - new Date(b.date));
-            }
-
-            renderFavorites(sortedFavorites);
-        }
-
-        // 4. Set up the page when it loads
-        // Listen for when the user changes the dropdown
-        sortDropdown.addEventListener("change", sortFavorites);
-        
-        // Run the sort right away so they start in A-Z order (or whatever is first in the dropdown)
-        sortFavorites(); 
-    </script>
 </body>
 </html>
