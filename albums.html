@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albums - My Photography</title>
+    <style>
+        /* Base Page Setup */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        header { padding: 20px 30px; }
+        nav { display: flex; gap: 20px; }
+        nav a {
+            text-decoration: none;
+            color: #000;
+            font-size: 1.2rem;
+            text-transform: lowercase;
+        }
+        nav a:hover { text-decoration: underline; }
+        
+        /* Active Page Styling (Red Underline) */
+        nav a.active {
+            text-decoration: underline;
+            text-decoration-color: red;
+            text-decoration-thickness: 3px;
+            text-underline-offset: 4px;
+        }
+
+        /* Main Content area */
+        main {
+            flex: 1; 
+            padding: 20px 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top Bar with Sort */
+        .controls-bar {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: flex-end; /* Pushes sort to the right */
+            margin-bottom: 30px;
+        }
+
+        .controls-bar select {
+            padding: 5px 10px;
+            font-size: 1rem;
+            border: 2px solid #000;
+            cursor: pointer;
+        }
+
+        /* The Infinite Grid */
+        .albums-grid {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            /* This is the magic line that makes it infinitely scrollable and responsive */
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        /* Individual Album Card */
+        .album-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none; /* Removes link underline from the whole card */
+            color: #000;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .album-card:hover {
+            transform: scale(1.03); /* Slight zoom when hovered */
+        }
+
+        /* The Black Square Cover */
+        .album-cover {
+            width: 100%;
+            aspect-ratio: 1 / 1; /* Forces a perfect square */
+            background-color: #000;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .album-title {
+            font-size: 1.2rem;
+            font-weight: normal;
+        }
+
+        /* Centered Footer Navigation */
+        footer {
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="index.html">home</a>
+            <a href="albums.html" class="active">albums</a>
+            <a href="favorites.html">favorites</a>
+            <a href="about.html">about</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="controls-bar">
+            <select id="sortDropdown">
+                <option value="name-asc">sort: name (a-z)</option>
+                <option value="name-desc">sort: name (z-a)</option>
+                <option value="date-new">sort: date (newest)</option>
+                <option value="date-old">sort: date (oldest)</option>
+            </select>
+        </div>
+
+        <div class="albums-grid" id="albumsGrid">
+            </div>
+    </main>
+
+    <footer>
+        <nav>
+            <a href="index.html">home</a>
+            <a href="albums.html" class="active">albums</a>
+            <a href="favorites.html">favorites</a>
+            <a href="about.html">about</a>
+        </nav>
+    </footer>
+
+    <script>
+        // 1. Your Album Data
+        // Add a "date" so we can sort by time. YYYY-MM-DD works best for sorting.
+        // The "link" determines what happens when they click the album.
+        let albums = [
+            { title: "Nature Walks", date: "2023-10-15", coverImage: "https://picsum.photos/id/1015/400/400", link: "album-nature.html" },
+            { title: "Family Vacation", date: "2024-01-20", coverImage: "https://picsum.photos/id/1018/400/400", link: "album-vacation.html" },
+            { title: "Home Life", date: "2022-05-11", coverImage: "https://picsum.photos/id/1019/400/400", link: "album-home.html" },
+            { title: "The Stars", date: "2024-03-05", coverImage: "https://picsum.photos/id/1022/400/400", link: "album-stars.html" },
+            { title: "A Trip to the Zoo", date: "2021-08-14", coverImage: "https://picsum.photos/id/1020/400/400", link: "album-zoo.html" },
+            { title: "City Streets", date: "2023-12-01", coverImage: "https://picsum.photos/id/1021/400/400", link: "album-city.html" }
+        ];
+
+        const gridElement = document.getElementById("albumsGrid");
+        const sortDropdown = document.getElementById("sortDropdown");
+
+        // 2. Function to draw the albums on the screen
+        function renderAlbums(albumsToRender) {
+            gridElement.innerHTML = ""; // Clear the grid first
+            
+            albumsToRender.forEach(album => {
+                // Create the HTML for one album
+                const albumHTML = `
+                    <a href="${album.link}" class="album-card">
+                        <img src="${album.coverImage}" alt="${album.title}" class="album-cover">
+                        <div class="album-title">${album.title}</div>
+                    </a>
+                `;
+                // Add it to the grid
+                gridElement.innerHTML += albumHTML;
+            });
+        }
+
+        // 3. Function to handle sorting
+        function sortAlbums() {
+            const sortMethod = sortDropdown.value;
+            let sortedAlbums = [...albums]; // Make a copy so we don't mess up the original list
+
+            if (sortMethod === "name-asc") {
+                sortedAlbums.sort((a, b) => a.title.localeCompare(b.title));
+            } 
+            else if (sortMethod === "name-desc") {
+                sortedAlbums.sort((a, b) => b.title.localeCompare(a.title));
+            } 
+            else if (sortMethod === "date-new") {
+                // Newest first (highest date value to lowest)
+                sortedAlbums.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } 
+            else if (sortMethod === "date-old") {
+                // Oldest first
+                sortedAlbums.sort((a, b) => new Date(a.date) - new Date(b.date));
+            }
+
+            renderAlbums(sortedAlbums);
+        }
+
+        // 4. Set up the page when it loads
+        // Listen for when the user changes the dropdown
+        sortDropdown.addEventListener("change", sortAlbums);
+        
+        // Run the sort right away so they start in A-Z order (or whatever is first in the dropdown)
+        sortAlbums(); 
+    </script>
+</body>
+</html>
