@@ -120,12 +120,20 @@
         </nav>
     </header>
 
-   <main>
-
+<main>
 <main class="albums-main">
+    <div class="controls-bar">
+            <select id="sortDropdown">
+                <option value="name-asc">sort: name (a-z)</option>
+                <option value="name-desc">sort: name (z-a)</option>
+                <option value="date-new">sort: date (newest)</option>
+                <option value="date-old">sort: date (oldest)</option>
+            </select>
+        </div>
 
-</main>
-
+        <div class="albums-grid" id="albumsGrid">
+            </div>
+    </main>
     <footer>
         <nav>
             <a href="index.html">home</a>
