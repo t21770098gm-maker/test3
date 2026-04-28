@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Photography</title>
+    <style>
+        /* Base Page Setup */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Garamond', serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #EAE0CC;
+            color: 4D6A6D
+        }
+
+        /* Top Navigation */
+        header { padding: 20px 30px; }
+        nav { display: flex; gap: 20px; }
+        nav a {
+            text-decoration: none;
+            color: #4D6A6D;
+            font-size: 1.3rem;
+            text-transform: none;
+        }
+        nav a:hover { text-decoration: underline; }
+
+        /* Main Gallery Layout */
+        main {
+            flex: 1; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Center Column (Photo + Caption) */
+        .gallery-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Navigation Arrows */
+        button.nav-arrow {
+            background: none;
+            border: none;
+            font-size: 4rem;
+            color: black;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            padding: 0 20px;
+        }
+        button.nav-arrow:hover { transform: scale(1.2); }
+
+        /* Big Photo Container */
+        .photo-container {
+            width: 100%;
+            height: 500px;
+            background-color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; /* Lets users know they can click it */
+        }
+        
+        .photo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: opacity 0.2s;
+        }
+        .photo-container img:hover { opacity: 0.9; }
+
+        /* Caption Styling */
+        .caption {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        /* Centered Footer Navigation */
+        footer {
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* --- LIGHTBOX (MODAL) STYLES --- */
+        .lightbox {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(77, 106, 109, 0.9); /* Dark semi-transparent background */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content {
+            max-width: 98%;
+            max-height: 98vh;
+            object-fit: contain;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: white;
+            font-size: 3rem;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        .close-btn:hover { color: #ccc; }
+
+        /* Position lightbox arrows */
+        .lightbox .nav-arrow { position: absolute; }
+        .lightbox #modalPrev { left: 20px; }
+        .lightbox #modalNext { right: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="albums.html">Albums</a>
+            <a href="favorites.html">Favorites</a>
+            <a href="about.html">About</a>
+        </nav>
+    </header>
+
+    <main>
+        <button class="nav-arrow" id="prevBtn">&#8592;</button>
+        
+        <div class="gallery-center">
+            <div class="photo-container" id="openLightboxBtn">
+                <img id="mainPhoto" src="" alt="Featured Photography">
+            </div>
+            <div class="caption" id="photoCaption"></div>
+        </div>
+        
+        <button class="nav-arrow" id="nextBtn">&#8594;</button>
+    </main>
+
+    <footer>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Albums</a>
+            <a href="#">Favorites</a>
+            <a href="#">About</a>
+        </nav>
+    </footer>
+
+    <div id="lightbox" class="lightbox">
+        <span class="close-btn" id="closeLightboxBtn">&times;</span>
+        <button class="nav-arrow" id="modalPrev">&#8592;</button>
+        <img id="lightboxImg" class="lightbox-content" src="">
+        <button class="nav-arrow" id="modalNext">&#8594;</button>
+    </div>
+
+    <script>
+        // 1. Updated Photo Array: Now includes the URL and the Album Name
+        const photos = [
+            { url: "https://picsum.photos/id/1015/900/500", album: "Nature Walks" },
+            { url: "https://picsum.photos/id/1018/900/500", album: "Family Vacation 2025" },
+            { url: "https://picsum.photos/id/1019/900/500", album: "Pets" },
+            { url: "https://picsum.photos/id/1022/900/500", album: "Astrophotography" }
+        ];
+
+        let currentIndex = 0;
+        
+        // Element references
+        const mainImgElement = document.getElementById('mainPhoto');
+        const captionElement = document.getElementById('photoCaption');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+
+        // Pick a random photo on initial page load
+        function loadRandomPhoto() {
+            currentIndex = Math.floor(Math.random() * photos.length);
+            updateDisplays();
+        }
+
+        // Update BOTH the main page and the lightbox when the picture changes
+        function updateDisplays() {
+            const currentPhoto = photos[currentIndex];
+            
+            // Update main page
+            mainImgElement.src = currentPhoto.url;
+            captionElement.innerHTML = `Found in album: <strong>${currentPhoto.album}</strong>`;
+            
+            // Update lightbox (so it's ready if opened, or updates if already open)
+            lightboxImg.src = currentPhoto.url;
+        }
+
+        // Arrow Logic (Moves index up or down)
+        function goBack() {
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            updateDisplays();
+        }
+
+        function goForward() {
+            currentIndex = (currentIndex + 1) % photos.length;
+            updateDisplays();
+        }
+
+        // Attach click events to Main Page Arrows
+        document.getElementById('prevBtn').addEventListener('click', goBack);
+        document.getElementById('nextBtn').addEventListener('click', goForward);
+
+        // Attach click events to Lightbox Arrows
+        document.getElementById('modalPrev').addEventListener('click', goBack);
+        document.getElementById('modalNext').addEventListener('click', goForward);
+
+        // Lightbox Open/Close Logic
+        document.getElementById('openLightboxBtn').addEventListener('click', () => {
+            lightbox.style.display = "flex";
+        });
+
+        document.getElementById('closeLightboxBtn').addEventListener('click', () => {
+            lightbox.style.display = "none";
+        });
+
+        // Close lightbox if user clicks anywhere on the dark background
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.style.display = "none";
+            }
+        });
+
+        // Start the gallery
+        loadRandomPhoto();
+    </script>
+</body>
+</html>
