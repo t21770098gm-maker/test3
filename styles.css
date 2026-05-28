@@ -1,10 +1,10 @@
 /* Color Palette */
 :root {
-  --dark-bg: #EAE0CC;
-  --dark-accent: #C9ADA1;
-  --brown: #A0A083;
-  --orange: #798478;
-  --peach: #4D6A6D;
+  --sand: #EAE0CC;
+  --almond: #C9ADA1;
+  --sage: #A0A083;
+  --olive: #798478;
+  --slate: #4D6A6D;
 }
 
 * {
