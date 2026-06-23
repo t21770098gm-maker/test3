@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Photography</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="index.html" class="active">Home</a>
+            <a href="albums.html">Albums</a>
+            <a href="favorites.html">Favorites</a>
+            <a href="about.html">About</a>
+        </nav>
+    </header>
+
+    <main>
+        <button class="nav-arrow" id="prevBtn">&#8592;</button>
+        <div class="gallery-center">
+            <img id="mainPhoto" src="" alt="Featured Photography">
+            <div class="caption" id="photoCaption"></div>
+        </div>
+        <button class="nav-arrow" id="nextBtn">&#8594;</button>
+    </main>
+
+    <footer>
+        <nav>
+            <a href="index.html" class="active">Home</a>
+            <a href="albums.html">Albums</a>
+            <a href="favorites.html">Favorites</a>
+            <a href="about.html">About</a>
+        </nav>
+    </footer>
+
+    <div id="lightbox" class="lightbox">
+        <span id="closeLightboxBtn">&times;</span>
+        <button id="modalPrev">&#8592;</button>
+        <img id="lightboxImg" src="">
+        <button id="modalNext">&#8594;</button>
+    </div>
+
+    <script>
+        const photos = [
+            { url: "https://picsum.photos/id/1015/900/500", album: "Nature Walks" },
+            { url: "https://picsum.photos/id/1018/900/500", album: "Family Vacation 2025" },
+            { url: "https://picsum.photos/id/1019/900/500", album: "Pets" },
+            { url: "https://picsum.photos/id/1022/900/500", album: "Astrophotography" }
+        ];
+
+        let i = Math.floor(Math.random() * photos.length);
+
+        const mainPhoto   = document.getElementById('mainPhoto');
+        const caption     = document.getElementById('photoCaption');
+        const lightbox    = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+
+        function show() {
+            mainPhoto.src     = photos[i].url;
+            lightboxImg.src   = photos[i].url;
+            caption.innerHTML = `Album: <strong>${photos[i].album}</strong>`;
+        }
+
+        function prev() { i = (i - 1 + photos.length) % photos.length; show(); }
+        function next() { i = (i + 1) % photos.length; show(); }
+
+        document.getElementById('prevBtn').onclick   = prev;
+        document.getElementById('nextBtn').onclick   = next;
+        document.getElementById('modalPrev').onclick = prev;
+        document.getElementById('modalNext').onclick = next;
+
+        mainPhoto.onclick = () => lightbox.classList.add('active');
+        document.getElementById('closeLightboxBtn').onclick = () => lightbox.classList.remove('active');
+        lightbox.onclick  = (e) => { if (e.target === lightbox) lightbox.classList.remove('active'); };
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lightbox.classList.remove('active'); });
+
+        show();
+    </script>
+</body>
+</html>
